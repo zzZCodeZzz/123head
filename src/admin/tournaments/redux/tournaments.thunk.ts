@@ -36,7 +36,7 @@ export const listTournamentsThunk = createAsyncThunk(
 export const getTournamentThunk = createAsyncThunk<Tournament, string>(
     "tournament/get",
     async (id) => {
-        const result = await getTournamentsCollection().doc().get();
+        const result = await getTournamentsCollection().doc(id).get();
         const tournament = result.data();
         if(!tournament) {
             throw {

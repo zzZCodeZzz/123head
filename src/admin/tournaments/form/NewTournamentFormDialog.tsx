@@ -1,6 +1,6 @@
 import {Form, Formik} from "formik";
 import React, {FC} from "react";
-import {useHistory, useLocation} from "react-router-dom";
+import {useHistory, useLocation, useRouteMatch} from "react-router-dom";
 import {Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle} from "@material-ui/core";
 import {FormikTextField} from "../../../sharedComponents/FormikTextfield";
 import * as yup from "yup";
@@ -35,8 +35,10 @@ interface NewTournamentFormDialogProps {
 export const NewTournamentFormDialog: FC<NewTournamentFormDialogProps> = ({onSubmit, loading}) => {
     const history = useHistory();
     const location = useLocation();
+    console.log("loc", location);
+    const {path} = useRouteMatch();
     return (
-        <Dialog open={location.hash === "new-tournament"}>
+        <Dialog open={location.hash === "#new-tournament"}>
             <DialogTitle>New Tournament</DialogTitle>
             <DialogContent>
                 <Formik
@@ -59,13 +61,17 @@ export const NewTournamentFormDialog: FC<NewTournamentFormDialogProps> = ({onSub
                             <FormikTextField
                                 name={"description"}
                                 label={"Description"}
-                                textFieldProps={{fullWidth: true, style: {marginBottom: 32}}}
+                                textFieldProps={{
+                                    fullWidth: true,
+                                    multiline: true,
+                                    style: {marginBottom: 32}
+                                }}
                             />
                             {loading
                                 ? <CircularProgress/>
                                 : (
                                     <DialogActions>
-                                        <Button onClick={() => history.replace("/")}>
+                                        <Button onClick={() => history.replace({pathname: path, hash: undefined})}>
                                             cancel
                                         </Button>
                                         <Button
