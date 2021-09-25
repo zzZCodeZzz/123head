@@ -31,6 +31,7 @@ export const TournamentsScreen: FC = () => {
     const handleCreateTournament = (t: NewTournamentState) =>
         dispatch(createTournamentThunk({
             ...t,
+            players: [],
             date: t.date.getTime(),
         }))
             .then(() => history.replace("/tournaments"))

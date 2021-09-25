@@ -20,8 +20,8 @@ export const FormikTextField: FC<FormikTextFieldProps> = ({
             {...textFieldProps}
             label={label}
             value={meta.value ?? ""}
-            error={Boolean(meta.error)}
-            helperText={meta.error}
+            error={meta.touched && Boolean(meta.error)}
+            helperText={meta.touched && meta.error}
             onChange={(e) => helpers.setValue(e.target.value)}
         />
     )

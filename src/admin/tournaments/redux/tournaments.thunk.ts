@@ -1,6 +1,7 @@
 import {createAsyncThunk, SerializedError} from "@reduxjs/toolkit";
-import {FirestoreTournament, Tournament} from "./types";
+import {FirestoreTournament, Player, Tournament} from "./types";
 import {getTournamentsCollection} from "./firestore/collections";
+import firebase from "firebase";
 
 export const createTournamentThunk = createAsyncThunk<Tournament, FirestoreTournament>(
     "tournaments/create",
@@ -25,11 +26,26 @@ export const updateTournamentThunk = createAsyncThunk<Tournament, { id: string, 
     }
 );
 
+export const joinTournamentThunk = createAsyncThunk<{ tournamentId: string, player: Player }, { tournamentId: string, player: Player }>(
+    "tournament/join",
+    async ({tournamentId, player}) => {
+        await getTournamentsCollection()
+            .doc(tournamentId)
+            .update({
+                id: tournamentId,
+                players: firebase.firestore.FieldValue.arrayUnion(player)
+            })
+        return {tournamentId, player};
+    }
+);
+
 export const listTournamentsThunk = createAsyncThunk(
     "tournaments/list",
     async () => {
         const results = await getTournamentsCollection().get();
-        return results.docs.map((d) => d.data());
+        return results.docs.map((d) => {
+            return d.data()
+        });
     }
 );
 
@@ -38,7 +54,8 @@ export const getTournamentThunk = createAsyncThunk<Tournament, string>(
     async (id) => {
         const result = await getTournamentsCollection().doc(id).get();
         const tournament = result.data();
-        if(!tournament) {
+        if (!tournament) {
+            // eslint-disable-next-line no-throw-literal
             throw {
                 name: "not found",
                 message: "tournament with id " + id + " not found"
@@ -46,4 +63,4 @@ export const getTournamentThunk = createAsyncThunk<Tournament, string>(
         }
         return tournament;
     }
-)
+);

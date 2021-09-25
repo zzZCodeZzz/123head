@@ -2,7 +2,7 @@ import {createEntityAdapter, createSlice, isAnyOf, SerializedError} from "@redux
 import {Tournament} from "./types";
 import {
     createTournamentThunk,
-    getTournamentThunk,
+    getTournamentThunk, joinTournamentThunk,
     listTournamentsThunk,
     updateTournamentThunk
 } from "./tournaments.thunk";
@@ -26,6 +26,16 @@ const tournamentsSlice = createSlice({
     reducers: {},
     extraReducers: (builder) =>
         builder
+            .addCase(joinTournamentThunk.fulfilled, (state, {payload}) => {
+                state.loading = false;
+                const oldTournament = state.entities[payload.tournamentId];
+                if(oldTournament) {
+                    tournamentsAdapter.updateOne(state, {
+                        id: payload.tournamentId,
+                        changes: { players: [...oldTournament.players, payload.player]}
+                    })
+                }
+            })
             .addCase(listTournamentsThunk.fulfilled, (state, {payload}) => {
                 state.loading = false;
                 tournamentsAdapter.upsertMany(state, payload);

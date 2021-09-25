@@ -24,18 +24,16 @@ const validationSchema = yup
         name: yup.string().required("required").min(3, "to short"),
         description: yup.string().notRequired(),
         date: yup.date().defined()
-    })
+    });
 
 interface NewTournamentFormDialogProps {
     onSubmit: (t: NewTournamentState) => void;
     loading: boolean;
-
 }
 
 export const NewTournamentFormDialog: FC<NewTournamentFormDialogProps> = ({onSubmit, loading}) => {
     const history = useHistory();
     const location = useLocation();
-    console.log("loc", location);
     const {path} = useRouteMatch();
     return (
         <Dialog open={location.hash === "#new-tournament"}>

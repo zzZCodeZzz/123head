@@ -9,6 +9,7 @@ export const tournamentDataConverter: firebase.firestore.FirestoreDataConverter<
             name: snapshotData.name,
             description: snapshotData.description,
             date: snapshotData.date,
+            players: snapshotData.players
         }
     },
     toFirestore({id, ...modelObject}: Tournament): firebase.firestore.DocumentData {

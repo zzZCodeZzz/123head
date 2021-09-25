@@ -1,11 +1,11 @@
 import React, {FC} from "react";
-import {UserPreview} from "../users/UserPreview";
+import {PlayerPreview} from "../users/PlayerPreview";
 
 export const TeamsPreview: FC = () => {
   return (
       <div style={{display: "flex"}}>
-          <UserPreview/>
-          <UserPreview/>
+          <PlayerPreview displayName={"max"}/>
+          <PlayerPreview displayName={"moritz"}/>
       </div>
   );
 };
